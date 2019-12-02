@@ -19,6 +19,7 @@
         <java.version>11</java.version>
         <mybatis-spring-boot-starter.version>2.1.0</mybatis-spring-boot-starter.version>
         <fastjson.version>1.2.58</fastjson.version>
+        <junit-jupiter.version>5.5.1</junit-jupiter.version>
     </properties>
 
     <dependencies>
@@ -33,9 +34,21 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>${mybatis-spring-boot-starter.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter-test</artifactId>
+            <version>${mybatis-spring-boot-starter.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -53,6 +66,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -97,6 +117,16 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+
+        <sourceDirectory>src/main/java</sourceDirectory>
+
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
 
     </build>
 

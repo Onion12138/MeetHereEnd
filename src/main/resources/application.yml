@@ -1,1 +1,15 @@
+spring:
+  profiles:
+    active: dev
+
+mybatis:
+  mapper-locations: classpath:com/ecnu/meethere/user/dao/xml/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+server:
+  servlet:
+    session:
+      cookie:
+        name: SESSIONID
+        http-only: true
 
