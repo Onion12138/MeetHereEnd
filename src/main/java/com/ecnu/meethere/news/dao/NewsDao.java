@@ -12,7 +12,9 @@ import java.util.List;
 public interface NewsDao {
     int insertNews(NewsDO newsDO);
 
-    List<NewsDigestDTO> listNewsDigest(PageParam pageParam);
+    List<Long> listNewsDigestsIds(PageParam pageParam);
+
+    List<NewsDTO> listNews(List<Long> newsIds);
 
     NewsDTO getNews(Long newsId);
 }

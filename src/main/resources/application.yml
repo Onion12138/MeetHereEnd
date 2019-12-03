@@ -14,10 +14,3 @@ server:
       cookie:
         name: SESSIONID
         http-only: true
-
-redis:
-  expires:
-    news:
-      expires: 120
-      timeUnit: MINUTES
-      randomRange: 20

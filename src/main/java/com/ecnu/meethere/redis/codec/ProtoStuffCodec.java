@@ -9,10 +9,23 @@ import org.springframework.util.CollectionUtils;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class ProtoStuffCodec implements RedisCodec {
+
+    public static class ListWrapper<T> {
+        private List<T> list;
+
+        public List<T> getList() {
+            return list;
+        }
+
+        public void setList(List<T> list) {
+            this.list = list;
+        }
+    }
 
     private final ThreadLocal<LinkedBuffer> buffer = new ThreadLocal<>();
 

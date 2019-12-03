@@ -1,10 +1,10 @@
 package com.ecnu.meethere.news.dao;
 
+import com.ecnu.meethere.common.utils.CollectionUtils;
 import com.ecnu.meethere.news.dto.NewsDTO;
 import com.ecnu.meethere.news.dto.NewsDigestDTO;
 import com.ecnu.meethere.news.entity.NewsDO;
 import com.ecnu.meethere.paging.PageParam;
-import com.ecnu.meethere.utils.ReflectionTestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +14,6 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -45,14 +44,13 @@ class NewsDaoTest {
     }
 
     @ParameterizedTest
-    @MethodSource("listNewsDigestGen")
-    void listNewsDigest(PageParam pageParam, int wSize) {
-        List<NewsDigestDTO> newsDigests = newsDao.listNewsDigest(pageParam);
+    @MethodSource("listNewsDigestsGen")
+    void listNewsDigests(PageParam pageParam, int wSize) {
+        List<Long> newsDigests = newsDao.listNewsDigestsIds(pageParam);
         assertEquals(wSize, newsDigests.size());
-        assertTrue(isCollectionElementsAllFieldsNotNull(newsDigests));
     }
 
-    static Stream<Arguments> listNewsDigestGen() {
+    static Stream<Arguments> listNewsDigestsGen() {
         return Stream.of(
                 of(new PageParam(1, 1), 1),
                 of(new PageParam(1, 5), 5),
@@ -63,11 +61,34 @@ class NewsDaoTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("listNewsGen")
+    void listNews(List<Long> newsIds, int wSize) {
+        List<NewsDTO> newsDigests = newsDao.listNews(newsIds);
+        assertEquals(wSize, newsDigests.size());
+        assertTrue(isCollectionElementsAllFieldsNotNull(newsDigests));
+        if (newsIds != null) {
+            //顺序id
+            assertTrue(CollectionUtils.test(newsIds, newsDigests,
+                    (id, newsDigest) -> id.equals(newsDigest.getId())));
+        }
+    }
+
+    static Stream<Arguments> listNewsGen() {
+        return Stream.of(
+                of(null, 0),
+                of(List.of(), 0),
+                of(List.of(-1L), 1),
+                of(List.of(-1L, -2L), 2),
+                of(List.of(-1L, -2L, -3L, -4L, -5L), 5)
+        );
+    }
+
     @Test
     void getNews() {
         NewsDTO news1 = newsDao.getNews(-1L);
         assertTrue(isAllFieldsNotNull(news1));
 
-        assertNull(newsDao.getNews(-5L));
+        assertNull(newsDao.getNews(-7L));
     }
 }

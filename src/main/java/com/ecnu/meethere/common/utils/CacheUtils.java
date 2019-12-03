@@ -10,21 +10,21 @@ public class CacheUtils {
     /**
      * 缓存失效时找到对应失效的id来进行数据库批量查询，然后将查询到的数据插入回缓存的通用函数
      *
-     * @param caches                 缓存集合，集合元素为null表示未命中
-     * @param ids                    id集合
-     * @param batchSelectFunc        由缓存集合中未命中的id集合来查找数据的函数
-     * @param dataMapToCacheFunc     数据映射到缓存的函数
-     * @param consumeMissedCacheFunc 额外作用于未命中缓存的函数，可能为null
-     * @param <Cache>                缓存类型
-     * @param <Id>                   id类型
-     * @param <Data>                 数据类型
+     * @param caches                       缓存集合，集合元素为null表示未命中
+     * @param ids                          id集合
+     * @param batchSelectFunc              由缓存集合中未命中的id集合来查找数据的函数
+     * @param dataMapToCacheFunc           数据映射到缓存的函数
+     * @param consumeMissedCacheOrDataFunc 额外作用于未命中缓存的函数，可能为null
+     * @param <Cache>                      缓存类型
+     * @param <Id>                         id类型
+     * @param <Data>                       数据类型
      */
     public static <Cache, Id, Data> List<Cache> handleBatchCache(
             List<Cache> caches,
             List<Id> ids,
             Function<List<Id>, List<Data>> batchSelectFunc,
             Function<List<Data>, List<Cache>> dataMapToCacheFunc,
-            BiConsumer<List<Id>, List<Cache>> consumeMissedCacheFunc) {
+            BiConsumer<List<Cache>, List<Data>> consumeMissedCacheOrDataFunc) {
         if (CollectionUtils.isEmpty(caches))
             return new ArrayList<>();
         if (ids == null || batchSelectFunc == null || dataMapToCacheFunc == null)
@@ -43,11 +43,11 @@ public class CacheUtils {
         }
 
         if (missedIds.size() > 0) {
-            List<Data> data = batchSelectFunc.apply(missedIds);
-            List<Cache> missCaches = dataMapToCacheFunc.apply(data);
+            List<Data> missData = batchSelectFunc.apply(missedIds);
+            List<Cache> missCaches = dataMapToCacheFunc.apply(missData);
             CollectionUtils.consume(missedIdIndices, missCaches, caches::set);
-            if (consumeMissedCacheFunc != null)
-                consumeMissedCacheFunc.accept(missedIds, missCaches);
+            if (consumeMissedCacheOrDataFunc != null)
+                consumeMissedCacheOrDataFunc.accept(missCaches, missData);
         }
 
         return caches;

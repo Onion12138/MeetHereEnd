@@ -14,18 +14,21 @@ public class RedisExpires {
     private Long randomRange;
 
     public long getExpires() {
-        return expires;
+        return expires + (randomRange > 0L ?
+                ThreadLocalRandom.current().nextLong(randomRange) * 2 - randomRange
+                : randomRange);
     }
 
     public void init() {
+        assert timeUnit != null;
+        resetExpiresAndRandomRange(expires, randomRange);
+    }
+
+    public void resetExpiresAndRandomRange(Long expires, Long randomRange) {
         assert expires != null;
         assert randomRange != null;
-        assert timeUnit != null;
         this.expires = timeUnit.toMillis(expires);
         this.randomRange = timeUnit.toMillis(randomRange);
-        assert expires >= randomRange;
-        long random = ThreadLocalRandom.current().nextLong(randomRange) * 2 - randomRange;
-        this.expires = expires + random;
     }
 
     public void setExpires(Long expires) {

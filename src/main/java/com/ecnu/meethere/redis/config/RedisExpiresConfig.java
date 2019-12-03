@@ -12,4 +12,10 @@ public class RedisExpiresConfig {
     public RedisExpires newsRedisExpires() {
         return new RedisExpires();
     }
+
+    @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.news-page")
+    public RedisExpires newsPageRedisExpires() {
+        return new RedisExpires();
+    }
 }

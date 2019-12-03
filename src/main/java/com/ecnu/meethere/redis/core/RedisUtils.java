@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
@@ -18,12 +19,17 @@ public class RedisUtils implements InitializingBean {
 
     private HashOperationsUtils hashOperationsUtils;
 
+    private ZSetOperationsUtils zSetOperationsUtils;
+
     public ValueOperationsUtils opsForValue() {
         return valueOperationsUtils;
     }
 
     public HashOperationsUtils opsForHash() {
         return hashOperationsUtils;
+    }
+    public ZSetOperationsUtils opsForZSet() {
+        return zSetOperationsUtils;
     }
 
     public void expire(String key, RedisExpires redisExpires) {
@@ -36,6 +42,11 @@ public class RedisUtils implements InitializingBean {
 
     public List<Object> exec() {
         return redisTemplate.exec();
+    }
+
+    //测试用
+    public void flushAll(){
+        redisTemplate.delete(redisTemplate.keys("*"));
     }
 
     public List<Object> executePipelined(RedisCallback redisCallback) {
@@ -59,5 +70,6 @@ public class RedisUtils implements InitializingBean {
     public void afterPropertiesSet() {
         this.valueOperationsUtils = new ValueOperationsUtils(this);
         this.hashOperationsUtils = new HashOperationsUtils(this);
+        this.zSetOperationsUtils = new ZSetOperationsUtils(this);
     }
 }

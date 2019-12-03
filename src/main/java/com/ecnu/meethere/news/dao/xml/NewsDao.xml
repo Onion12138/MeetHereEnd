@@ -2,27 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ecnu.meethere.news.dao.NewsDao">
-    <resultMap id="UserDTO" type="com.ecnu.meethere.news.dto.NewsDTO">
+    <resultMap id="NewsDTO" type="com.ecnu.meethere.news.dto.NewsDTO">
         <id property="id" column="id"/>
         <id property="userId" column="user_id"/>
         <id property="title" column="title"/>
         <id property="image" column="image"/>
         <id property="content" column="content"/>
         <id property="timeCreate" column="time_create"/>
-
     </resultMap>
+    <resultMap id="NewsDigestDTO" type="com.ecnu.meethere.news.dto.NewsDigestDTO">
+        <id property="id" column="id"/>
+        <id property="userId" column="user_id"/>
+        <id property="title" column="title"/>
+        <id property="image" column="image"/>
+        <id property="timeCreate" column="time_create"/>
+    </resultMap>
+
+
     <insert id="insertNews">
         insert into news (id, user_id, title, image, content)
         values (#{id}, #{userId}, #{title}, #{image}, #{content});
     </insert>
-    <select id="getNews" resultType="com.ecnu.meethere.news.dto.NewsDTO">
+    <select id="getNews" resultMap="NewsDTO">
         select id, user_id, title, image, content, time_create
         from news
         where id = #{newsId}
     </select>
-    <select id="listNewsDigest" resultType="com.ecnu.meethere.news.dto.NewsDigestDTO">
-        select id, user_id, title, image, time_create
+    <select id="listNewsDigestsIds" resultMap="NewsDigestDTO">
+        select id
         from news
+        order by time_create
         limit ${pageSize * (pageNum - 1)},#{pageSize}
+    </select>
+    <select id="listNews" resultMap="NewsDTO">
+        select id, user_id, title, image, content, time_create
+        from news
+        where
+        <choose>
+            <when test="list != null and list.size() > 0">
+                id in
+                <foreach collection="list" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+                order by field(
+                <foreach collection="list" item="item" open="id," separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
     </select>
 </mapper>
