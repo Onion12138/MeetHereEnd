@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecnu.meethere.news.dao.NewsDao">
+    <resultMap id="UserDTO" type="com.ecnu.meethere.news.dto.NewsDTO">
+        <id property="id" column="id"/>
+        <id property="userId" column="user_id"/>
+        <id property="title" column="title"/>
+        <id property="image" column="image"/>
+        <id property="content" column="content"/>
+        <id property="timeCreate" column="time_create"/>
+
+    </resultMap>
+    <insert id="insertNews">
+        insert into news (id, user_id, title, image, content)
+        values (#{id}, #{userId}, #{title}, #{image}, #{content});
+    </insert>
+    <select id="getNews" resultType="com.ecnu.meethere.news.dto.NewsDTO">
+        select id, user_id, title, image, content, time_create
+        from news
+        where id = #{newsId}
+    </select>
+    <select id="listNewsDigest" resultType="com.ecnu.meethere.news.dto.NewsDigestDTO">
+        select id, user_id, title, image, time_create
+        from news
+        limit ${pageSize * (pageNum - 1)},#{pageSize}
+    </select>
+</mapper>

@@ -3,7 +3,9 @@ spring:
     active: dev
 
 mybatis:
-  mapper-locations: classpath:com/ecnu/meethere/user/dao/xml/*.xml
+  mapper-locations:
+    classpath:com/ecnu/meethere/user/dao/xml/*.xml,
+    classpath:com/ecnu/meethere/news/dao/xml/*.xml
   configuration:
     map-underscore-to-camel-case: true
 server:
@@ -13,3 +15,9 @@ server:
         name: SESSIONID
         http-only: true
 
+redis:
+  expires:
+    news:
+      expires: 120
+      timeUnit: MINUTES
+      randomRange: 20
