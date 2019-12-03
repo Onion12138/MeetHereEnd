@@ -1,4 +1,4 @@
-package com.ecnu.meethere.dao;
+package com.ecnu.meethere.user.dao;
 
 import com.ecnu.meethere.user.dao.UserDao;
 import com.ecnu.meethere.user.entity.UserDO;
