@@ -77,9 +77,9 @@ public class ValueOperationsUtils {
         return value;
     }
 
-    public <T> void multiSetIfAbsent(List<String> keys,
-                                     List<T> values,
-                                     RedisExpires redisExpires) {
+    public <T> void multiSet(List<String> keys,
+                             List<T> values,
+                             RedisExpires redisExpires) {
         if (CollectionUtils.isEmpty(keys))
             return;
         if (redisExpires == null)

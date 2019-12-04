@@ -15,3 +15,7 @@ redis:
       expires: 3
       timeUnit: SECONDS
       randomRange: 0
+    user-vo:
+      expires: 120
+      timeUnit: SECONDS
+      randomRange: 20

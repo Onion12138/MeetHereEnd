@@ -9,6 +9,7 @@ import com.ecnu.meethere.user.result.UserResult;
 import com.ecnu.meethere.user.service.UserService;
 import com.ecnu.meethere.user.utils.UsernamePasswordValidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,9 +27,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @PostMapping(value = "login")
-    public Result<?> login(@Valid @RequestBody @NotNull LoginParam loginParam,
+    public Result<?> login(@Valid @RequestBody LoginParam loginParam,
                            BindingResult bindingResult,
+                           @Value("${user-session-info.name}") String userSessionInfoName,
                            HttpServletRequest request) {
         if (request.getSession(false) != null)
             return CommonResult.failed();
@@ -38,7 +41,7 @@ public class UserController {
         UserSessionInfo userSessionInfo = userService.login(loginParam);
 
         HttpSession session = request.getSession(true);
-        session.setAttribute("userSessionInfo", userSessionInfo);
+        session.setAttribute(userSessionInfoName, userSessionInfo);
 
         return CommonResult.success().data(userSessionInfo);
     }

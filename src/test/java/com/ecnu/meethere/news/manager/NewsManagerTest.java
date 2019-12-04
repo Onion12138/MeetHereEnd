@@ -49,15 +49,14 @@ class NewsManagerTest {
     private RedisUtils redisUtils;
 
     @AfterEach
-    void flushAll(){
+    void flushAll() {
         redisUtils.flushAll();
     }
 
     @Test
     void getNews() {
         when(newsDao.getNews(-1L)).thenReturn(
-                new NewsDTO().setId(-1L).setUserId(1L).setTitle("title").setImage("").setContent(
-                        "content").setTimeCreate(LocalDateTime.now())
+                new NewsDTO(-1L, 1L, "t", "", "c", LocalDateTime.now())
         );
         NewsDTO news = newsManager.getNews(-1L);
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(news));
@@ -71,14 +70,15 @@ class NewsManagerTest {
     @Test
     void listNewsDigests() {
         when(newsDao.listNews(List.of(-1L))).thenReturn(
-                List.of(new NewsDTO().setId(-1L).setUserId(1L).setTitle("title").setImage("").setContent(
-                        "content").setTimeCreate(LocalDateTime.now())));
+                List.of(new NewsDTO(-1L, 1L, "t", "", "c", LocalDateTime.now())));
         when(newsDao.listNewsDigestsIds(any())).thenReturn(List.of(-1L));
 
+        //缓存不命中
         List<NewsDigestDTO> newsDigests = newsManager.listNewsDigests(new PageParam(1, 1));
         assertEquals(1, newsDigests.size());
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(newsDigests.get(0)));
 
+        //缓存命中
         List<NewsDigestDTO> newsDigests1 = newsManager.listNewsDigests(new PageParam(1, 1));
         assertEquals(1, newsDigests1.size());
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(newsDigests1.get(0)));
@@ -90,10 +90,8 @@ class NewsManagerTest {
     void listNewsDigestsByNewsIds() {
         when(newsDao.listNews(List.of(-1L, -2L))).thenReturn(
                 List.of(
-                        new NewsDTO().setId(-1L).setUserId(1L).setTitle("title").setImage("").setContent(
-                                "content").setTimeCreate(LocalDateTime.now()),
-                        new NewsDTO().setId(-2L).setUserId(1L).setTitle("title").setImage("").setContent(
-                                "content").setTimeCreate(LocalDateTime.now())
+                        new NewsDTO(-1L, 1L, "t", "", "c", LocalDateTime.now()),
+                        new NewsDTO(-2L, 1L, "t", "", "c", LocalDateTime.now())
                 )
         );
 
@@ -121,9 +119,8 @@ class NewsManagerTest {
 
         when(newsDao.listNews(List.of(-3L))).thenReturn(
                 List.of(
-                        new NewsDTO().setId(-3L).setUserId(1L).setTitle("title").setImage("").setContent(
-                                "content").setTimeCreate(LocalDateTime.now())
-                )
+                        new NewsDTO(-3L, 1L, "t", "", "c", LocalDateTime.now())
+                        )
         );
 
         //缓存命中

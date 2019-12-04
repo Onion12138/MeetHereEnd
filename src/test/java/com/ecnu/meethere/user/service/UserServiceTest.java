@@ -7,8 +7,10 @@ import com.ecnu.meethere.user.dto.UserDTO;
 import com.ecnu.meethere.user.exception.IncorrectUsernameOrPasswordException;
 import com.ecnu.meethere.user.exception.UsernameAlreadyExistException;
 import com.ecnu.meethere.user.exception.UsernameNotExistsException;
+import com.ecnu.meethere.user.manager.UserManager;
 import com.ecnu.meethere.user.param.LoginParam;
 import com.ecnu.meethere.user.param.RegisterParam;
+import com.ecnu.meethere.user.vo.UserVO;
 import com.ecnu.meethere.utils.ReflectionTestUtils;
 import com.mysql.cj.log.Log;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,12 +40,14 @@ class UserServiceTest {
     private UserService userService;
 
     @Mock
+    private UserManager userManager;
+
+    @Mock
     private UserDao userDao;
 
     @Spy
     private IdGenerator idGenerator = new SnowflakeIdGenerator(0, 0);
 
-    @BeforeEach
     void before() {
         when(userDao.getUserByUsername(anyString()))
                 .thenAnswer(invocation -> {
@@ -59,6 +63,7 @@ class UserServiceTest {
     @ParameterizedTest
     @MethodSource("loginGen")
     void login(LoginParam loginParam, Class<? extends Throwable> wEx) {
+        before();
         if (wEx != null)
             assertThrows(wEx, () -> userService.login(loginParam));
         else
@@ -76,6 +81,7 @@ class UserServiceTest {
     @ParameterizedTest
     @MethodSource("registerGen")
     void register(RegisterParam registerParam, Class<? extends Throwable> wEx) {
+        before();
         Executable target = () -> userService.register(registerParam);
         if (wEx != null)
             assertThrows(wEx, target);
@@ -88,5 +94,12 @@ class UserServiceTest {
                 of(new RegisterParam("testu", "testp"), UsernameAlreadyExistException.class),
                 of(new RegisterParam("null", "null"), null)
         );
+    }
+
+    @Test
+    void getUserVO() {
+        when(userManager.getUserVO(anyLong())).thenReturn(new UserVO().setId(-1L));
+
+        assertEquals(-1L, userService.getUserVO(-1L).getId());
     }
 }

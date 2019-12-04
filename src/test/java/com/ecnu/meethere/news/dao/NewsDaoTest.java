@@ -4,6 +4,7 @@ import com.ecnu.meethere.common.utils.CollectionUtils;
 import com.ecnu.meethere.news.dto.NewsDTO;
 import com.ecnu.meethere.news.dto.NewsDigestDTO;
 import com.ecnu.meethere.news.entity.NewsDO;
+import com.ecnu.meethere.news.param.NewsUpdateParam;
 import com.ecnu.meethere.paging.PageParam;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,5 +91,19 @@ class NewsDaoTest {
         assertTrue(isAllFieldsNotNull(news1));
 
         assertNull(newsDao.getNews(-7L));
+    }
+
+    @Test
+    void deleteNews() {
+        assertEquals(1, newsDao.deleteNews(-1L));
+    }
+
+    @Test
+    void updateNews() {
+        assertEquals(1,
+                newsDao.updateNews(new NewsUpdateParam(-1L, "你好", null, null)));
+
+        assertEquals(1,
+                newsDao.updateNews(new NewsUpdateParam(-1L, "我好", "12", "23")));
     }
 }

@@ -23,6 +23,29 @@
         insert into news (id, user_id, title, image, content)
         values (#{id}, #{userId}, #{title}, #{image}, #{content});
     </insert>
+    <update id="updateNews">
+        update news
+        set
+        <trim suffixOverrides=",">
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNews">
+        delete
+        from news
+        where id = #{id}
+    </delete>
+
     <select id="getNews" resultMap="NewsDTO">
         select id, user_id, title, image, content, time_create
         from news

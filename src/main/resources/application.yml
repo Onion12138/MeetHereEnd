@@ -8,6 +8,8 @@ mybatis:
     classpath:com/ecnu/meethere/news/dao/xml/*.xml
   configuration:
     map-underscore-to-camel-case: true
+user-session-info:
+  name: userSessionInfo
 server:
   servlet:
     session:

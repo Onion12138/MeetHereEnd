@@ -18,4 +18,10 @@ public class RedisExpiresConfig {
     public RedisExpires newsPageRedisExpires() {
         return new RedisExpires();
     }
+
+    @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.user-vo")
+    public RedisExpires userVORedisExpires() {
+        return new RedisExpires();
+    }
 }

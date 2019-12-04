@@ -1,5 +1,6 @@
 package com.ecnu.meethere.news.manager;
 
+import com.ecnu.meethere.common.annotation.Manager;
 import com.ecnu.meethere.common.utils.CacheUtils;
 import com.ecnu.meethere.news.dao.NewsDao;
 import com.ecnu.meethere.news.dto.NewsDTO;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * News的缓存层
  */
-@Component
+@Manager
 public class NewsManager {
     @Autowired
     private NewsDao newsDao;

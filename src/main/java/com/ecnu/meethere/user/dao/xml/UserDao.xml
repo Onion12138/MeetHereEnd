@@ -10,6 +10,12 @@
         <result property="isAdministrator" column="is_administrator"/>
     </resultMap>
 
+    <resultMap id="UserVO" type="com.ecnu.meethere.user.vo.UserVO">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
     <insert id="insertUser">
         insert into user (id, username, password)
         values (#{id}, #{username}, #{password});
@@ -22,5 +28,30 @@
     </select>
     <select id="isUserExistById" resultType="java.lang.Boolean">
         select ifnull((select true from user where id = #{id}), false)
+    </select>
+    <select id="getUserVO" resultMap="UserVO">
+        select id, username, avatar
+        from user
+        where id = #{id}
+    </select>
+    <select id="listUserVOs" resultMap="UserVO">
+        select id, username, avatar
+        from user
+        where
+        <choose>
+            <when test="list != null and list.size() > 0">
+                id in
+                <foreach collection="list" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+                order by field(
+                <foreach collection="list" item="item" open="id," separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
     </select>
 </mapper>
