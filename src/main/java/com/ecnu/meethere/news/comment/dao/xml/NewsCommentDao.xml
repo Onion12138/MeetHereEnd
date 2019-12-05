@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecnu.meethere.news.comment.dao.NewsCommentDao">
+    <resultMap id="NewsCommentDTO" type="com.ecnu.meethere.news.comment.dto.NewsCommentDTO">
+        <id property="id" column="id"/>
+        <id property="userId" column="user_id"/>
+        <id property="content" column="content"/>
+        <id property="timeCreate" column="time_create"/>
+    </resultMap>
+
+    <insert id="insertComment">
+        insert into news_comment (id, news_id, user_id, content)
+        values (#{id}, #{newsId}, #{userId}, #{content});
+    </insert>
+
+    <update id="updateComment">
+        update news_comment
+        set
+        <if test="content != null">
+            content = #{content},
+        </if>
+        time_modified = current_timestamp
+        where id = #{id}
+    </update>
+
+    <delete id="deleteComment">
+        delete
+        from news_comment
+        where id = #{id}
+    </delete>
+
+    <select id="listCommentIdsByPage" resultType="java.lang.Long">
+        select id
+        from news_comment
+        where news_id = #{newsId}
+        order by time_create desc
+        limit ${pageParam.pageSize * (pageParam.pageNum - 1)},#{pageParam.pageSize}
+    </select>
+
+    <select id="listCommentsByIds"
+            resultMap="NewsCommentDTO">
+        select id, user_id, content, time_create
+        from news_comment
+        where
+        <choose>
+            <when test="list != null and list.size() > 0">
+                id in
+                <foreach collection="list" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+                order by field(
+                <foreach collection="list" item="item" open="id," separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
+    </select>
+    <select id="getComment" resultMap="NewsCommentDTO">
+        select id, user_id, content, time_create
+        from news_comment
+        where id = #{id}
+    </select>
+</mapper>

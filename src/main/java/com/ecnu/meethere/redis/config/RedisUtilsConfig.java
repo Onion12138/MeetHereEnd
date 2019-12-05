@@ -1,11 +1,10 @@
 package com.ecnu.meethere.redis.config;
 
-import com.ecnu.meethere.redis.codec.ProtoStuffCodec;
+import com.ecnu.meethere.redis.codec.protobuf.ProtoStuffCodec;
 import com.ecnu.meethere.redis.codec.RedisCodec;
 import com.ecnu.meethere.redis.core.RedisUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;

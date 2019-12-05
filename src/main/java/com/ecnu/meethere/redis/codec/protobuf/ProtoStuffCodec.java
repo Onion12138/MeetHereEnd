@@ -1,9 +1,10 @@
-package com.ecnu.meethere.redis.codec;
+package com.ecnu.meethere.redis.codec.protobuf;
 
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import com.ecnu.meethere.redis.codec.RedisCodec;
 import org.joor.Reflect;
 import org.springframework.util.CollectionUtils;
 
@@ -14,18 +15,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ProtoStuffCodec implements RedisCodec {
-
-    public static class ListWrapper<T> {
-        private List<T> list;
-
-        public List<T> getList() {
-            return list;
-        }
-
-        public void setList(List<T> list) {
-            this.list = list;
-        }
-    }
 
     private final ThreadLocal<LinkedBuffer> buffer = new ThreadLocal<>();
 

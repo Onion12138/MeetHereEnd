@@ -9,7 +9,6 @@ import com.ecnu.meethere.paging.PageParam;
 import com.ecnu.meethere.session.UserSessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,15 +26,14 @@ public class NewsController {
     }
 
     @GetMapping(value = "digest/list")
-    public Result<?> listNewsDigests(@ModelAttribute @Valid PageParam pageParam, BindingResult bindingResult) {
+    public Result<?> listNewsDigests(@ModelAttribute @Valid PageParam pageParam) {
         return CommonResult.success().data(newsService.listNewsDigests(pageParam));
     }
 
     @PostMapping(value = "publish")
     public Result<?> publishNews(
             @SessionAttribute UserSessionInfo userSessionInfo,
-            @RequestBody @Valid NewsPublishParam publishParam,
-            BindingResult bindingResult) {
+            @RequestBody @Valid NewsPublishParam publishParam) {
         if(!userSessionInfo.getIsAdministrator())
             return CommonResult.accessDenied();
 
@@ -46,8 +44,7 @@ public class NewsController {
     @PostMapping(value = "delete")
     public Result<?> deleteNews(
             @SessionAttribute UserSessionInfo userSessionInfo,
-            @RequestBody Long newsId,
-            BindingResult bindingResult) {
+            @RequestBody Long newsId) {
         if(!userSessionInfo.getIsAdministrator())
             return CommonResult.accessDenied();
 
@@ -58,8 +55,7 @@ public class NewsController {
     @PostMapping(value = "update")
     public Result<?> updateNews(
             @SessionAttribute UserSessionInfo userSessionInfo,
-            @RequestBody @Valid NewsUpdateParam updateParam,
-            BindingResult bindingResult) {
+            @RequestBody @Valid NewsUpdateParam updateParam) {
         if(!userSessionInfo.getIsAdministrator())
             return CommonResult.accessDenied();
 

@@ -1,6 +1,5 @@
 package com.ecnu.meethere.user.controller;
 
-import com.ecnu.meethere.common.aspect.BindingResultAspect;
 import com.ecnu.meethere.common.result.CommonResult;
 import com.ecnu.meethere.common.result.Result;
 import com.ecnu.meethere.user.exception.IncorrectUsernameOrPasswordException;
@@ -38,11 +37,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-@WebMvcTest(
-        value = UserController.class,
-        includeFilters = @ComponentScan.Filter(Aspect.class)
-)
-@ImportAutoConfiguration(AopAutoConfiguration.class)
+@WebMvcTest(UserController.class)
 class UserControllerTest {
     @Autowired
     private MockMvc mvc;

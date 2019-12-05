@@ -26,7 +26,6 @@
     <update id="updateNews">
         update news
         set
-        <trim suffixOverrides=",">
             <if test="title != null">
                 title = #{title},
             </if>
@@ -36,7 +35,7 @@
             <if test="content != null">
                 content = #{content},
             </if>
-        </trim>
+            time_modified = current_timestamp
         where id = #{id}
     </update>
 

@@ -10,7 +10,6 @@ import com.ecnu.meethere.user.service.UserService;
 import com.ecnu.meethere.user.utils.UsernamePasswordValidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,6 @@ public class UserController {
 
     @PostMapping(value = "login")
     public Result<?> login(@Valid @RequestBody LoginParam loginParam,
-                           BindingResult bindingResult,
                            @Value("${user-session-info.name}") String userSessionInfoName,
                            HttpServletRequest request) {
         if (request.getSession(false) != null)
@@ -47,8 +45,7 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public Result<?> register(@Valid @RequestBody RegisterParam registerParam,
-                              BindingResult bindingResult) {
+    public Result<?> register(@Valid @RequestBody RegisterParam registerParam) {
         if (!UsernamePasswordValidUtils.isValidUsername(registerParam.getUsername()) || !UsernamePasswordValidUtils.isValidPassword(registerParam.getPassword()))
             return UserResult.incorrectUsernameOrPassword();
         userService.register(registerParam);

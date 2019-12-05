@@ -5,7 +5,8 @@ spring:
 mybatis:
   mapper-locations:
     classpath:com/ecnu/meethere/user/dao/xml/*.xml,
-    classpath:com/ecnu/meethere/news/dao/xml/*.xml
+    classpath:com/ecnu/meethere/news/dao/xml/*.xml,
+    classpath:com/ecnu/meethere/news/comment/dao/xml/*.xml
   configuration:
     map-underscore-to-camel-case: true
 user-session-info:

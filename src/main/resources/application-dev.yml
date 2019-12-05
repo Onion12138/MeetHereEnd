@@ -8,10 +8,18 @@ spring:
 redis:
   expires:
     news:
-      expires: 120
-      timeUnit: MINUTES
+      expires: 60
+      timeUnit: SECONDS
+      randomRange: 20
+    news-comment:
+      expires: 60
+      timeUnit: SECONDS
       randomRange: 20
     news-page:
+      expires: 3
+      timeUnit: SECONDS
+      randomRange: 0
+    news-comment-page:
       expires: 3
       timeUnit: SECONDS
       randomRange: 0

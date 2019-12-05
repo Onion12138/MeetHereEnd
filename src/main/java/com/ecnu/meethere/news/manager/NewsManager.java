@@ -6,13 +6,14 @@ import com.ecnu.meethere.news.dao.NewsDao;
 import com.ecnu.meethere.news.dto.NewsDTO;
 import com.ecnu.meethere.news.dto.NewsDigestDTO;
 import com.ecnu.meethere.paging.PageParam;
-import com.ecnu.meethere.redis.codec.ProtoStuffCodec;
+import com.ecnu.meethere.redis.codec.protobuf.ListWrapper;
+import com.ecnu.meethere.redis.codec.protobuf.LongListWrapper;
+import com.ecnu.meethere.redis.codec.protobuf.ProtoStuffCodec;
 import com.ecnu.meethere.redis.core.RedisExpires;
 import com.ecnu.meethere.redis.core.RedisUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,9 +52,6 @@ public class NewsManager {
         );
     }
 
-    private static class LongListWrapper extends ProtoStuffCodec.ListWrapper<Long> {
-    }
-
     public List<NewsDigestDTO> listNewsDigests(PageParam pageParam) {
         String redisKey = getNewsPageRedisKey(pageParam);
         List<Long> cache = Optional.ofNullable(redisUtils.opsForValue().get(redisKey,
@@ -67,7 +65,8 @@ public class NewsManager {
                 pageParam,
                 newsDao::listNewsDigestsIds,
                 Function.identity(),
-                (pp, c) -> redisUtils.opsForValue().set(redisKey, c, newsPageRedisExpires)
+                (pp, c) -> redisUtils.opsForValue().set(redisKey, new LongListWrapper(c),
+                        newsPageRedisExpires)
         ));
     }
 

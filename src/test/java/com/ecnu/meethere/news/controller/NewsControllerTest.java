@@ -31,11 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-@WebMvcTest(
-        value = NewsController.class,
-        includeFilters = @ComponentScan.Filter(Aspect.class)
-)
-@ImportAutoConfiguration(AopAutoConfiguration.class)
+@WebMvcTest(NewsController.class)
 class NewsControllerTest {
     @Autowired
     private MockMvc mvc;

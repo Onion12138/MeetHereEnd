@@ -101,6 +101,10 @@ class NewsDaoTest {
     @Test
     void updateNews() {
         assertEquals(1,
+                newsDao.updateNews(new NewsUpdateParam(-1L, null, null, null)));
+
+
+        assertEquals(1,
                 newsDao.updateNews(new NewsUpdateParam(-1L, "你好", null, null)));
 
         assertEquals(1,
