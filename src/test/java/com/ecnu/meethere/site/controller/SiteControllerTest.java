@@ -1,14 +1,14 @@
-package com.ecnu.meethere.news.comment.controller;
+package com.ecnu.meethere.site.controller;
 
 import com.ecnu.meethere.common.result.CommonResult;
 import com.ecnu.meethere.common.result.Result;
-import com.ecnu.meethere.news.comment.param.NewsCommentPostParam;
-import com.ecnu.meethere.news.comment.param.NewsCommentUpdateParam;
-import com.ecnu.meethere.news.comment.service.NewsCommentService;
+import com.ecnu.meethere.news.controller.NewsController;
 import com.ecnu.meethere.news.service.NewsService;
 import com.ecnu.meethere.paging.PageParam;
 import com.ecnu.meethere.session.UserSessionInfo;
-import org.junit.jupiter.api.BeforeAll;
+import com.ecnu.meethere.site.param.SiteCreateParam;
+import com.ecnu.meethere.site.param.SiteUpdateParam;
+import com.ecnu.meethere.site.service.SiteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 
 import static com.ecnu.meethere.utils.MockMvcTestUtils.jsonSerialize;
 import static com.ecnu.meethere.utils.MockMvcTestUtils.parseMvcResult;
@@ -29,18 +29,18 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-@WebMvcTest(NewsCommentController.class)
-class NewsCommentControllerTest {
+@WebMvcTest(SiteController.class)
+class SiteControllerTest {
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private NewsCommentService newsCommentService;
+    private SiteService siteService;
 
     @Value("${user-session-info.name}")
     private String userSessionInfoName;
 
-    private MockHttpSession session;
+    private MockHttpSession session ;
 
     @BeforeEach
     void before() {
@@ -49,60 +49,65 @@ class NewsCommentControllerTest {
     }
 
     @Test
-    void listComments() throws Exception {
+    void getSite() throws Exception {
         MvcResult result = mvc.perform(
-                get("/news/comment/list")
-                        .param("newsId", "1")
+                get("/site/get")
+                        .param("siteId", "1")
+        ).andReturn();
+        verify(siteService).getSite(1L);
+        Result<Object> res = parseMvcResult(result, null);
+        assertEquals(CommonResult.SUCCESS, res.getCode());
+    }
+
+    @Test
+    void listSites() throws Exception {
+        MvcResult result = mvc.perform(
+                get("/site/list")
                         .param("pageNum", "1")
-                        .session(session)
                         .param("pageSize", "1")
         ).andReturn();
-        verify(newsCommentService).listComments(1L, new PageParam(1, 1));
+        verify(siteService).listSites(new PageParam(1, 1));
         Result<Object> res = parseMvcResult(result, null);
         assertEquals(CommonResult.SUCCESS, res.getCode());
     }
 
     @Test
-    void postComment() throws Exception {
-        NewsCommentPostParam postParam = new NewsCommentPostParam(1L, "123");
+    void createSite() throws Exception {
+        SiteCreateParam createParam = new SiteCreateParam("1", "1", "1", BigDecimal.ONE, "1");
         MvcResult result = mvc.perform(
-                post("/news/comment/post")
+                post("/site/create")
+                        .content(jsonSerialize(createParam))
                         .session(session)
-                        .content(jsonSerialize(postParam))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
         ).andReturn();
-        verify(newsCommentService).postComment(1L, postParam);
-
+        verify(siteService).createSite(createParam);
         Result<Object> res = parseMvcResult(result, null);
         assertEquals(CommonResult.SUCCESS, res.getCode());
     }
 
     @Test
-    void updateComment() throws Exception {
-        NewsCommentUpdateParam updateParam = new NewsCommentUpdateParam(1L, "123");
+    void deleteSite() throws Exception {
         MvcResult result = mvc.perform(
-                post("/news/comment/update")
+                post("/site/delete")
+                        .content("1")
                         .session(session)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        ).andReturn();
+        verify(siteService).deleteSite(1L);
+        Result<Object> res = parseMvcResult(result, null);
+        assertEquals(CommonResult.SUCCESS, res.getCode());
+    }
+
+    @Test
+    void updateNews() throws Exception {
+        SiteUpdateParam updateParam = new SiteUpdateParam(1L, "1", "1", "1", BigDecimal.ONE, "1");
+        MvcResult result = mvc.perform(
+                post("/site/update")
                         .content(jsonSerialize(updateParam))
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-        ).andReturn();
-
-        verify(newsCommentService).updateComment(1L, true, updateParam);
-
-
-        Result<Object> res = parseMvcResult(result, null);
-        assertEquals(CommonResult.SUCCESS, res.getCode());
-    }
-
-    @Test
-    void deleteComment() throws Exception {
-        MvcResult result = mvc.perform(
-                post("/news/comment/delete")
                         .session(session)
-                        .content(jsonSerialize(1L))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
         ).andReturn();
-        verify(newsCommentService).deleteComment(1L, true, 1L);
+        verify(siteService).updateSite(updateParam);
         Result<Object> res = parseMvcResult(result, null);
         assertEquals(CommonResult.SUCCESS, res.getCode());
     }

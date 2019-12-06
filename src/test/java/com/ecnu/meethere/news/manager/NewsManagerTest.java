@@ -71,7 +71,7 @@ class NewsManagerTest {
     void listNewsDigests() {
         when(newsDao.listNews(List.of(-1L))).thenReturn(
                 List.of(new NewsDTO(-1L, 1L, "t", "", "c", LocalDateTime.now())));
-        when(newsDao.listNewsDigestsIds(any())).thenReturn(List.of(-1L));
+        when(newsDao.listNewsDigestIds(any())).thenReturn(List.of(-1L));
 
         //缓存不命中
         List<NewsDigestDTO> newsDigests = newsManager.listNewsDigests(new PageParam(1, 1));
@@ -83,7 +83,7 @@ class NewsManagerTest {
         assertEquals(1, newsDigests1.size());
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(newsDigests1.get(0)));
 
-        verify(newsDao, times(1)).listNewsDigestsIds(any());
+        verify(newsDao, times(1)).listNewsDigestIds(any());
     }
 
     @Test

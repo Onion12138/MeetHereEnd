@@ -6,7 +6,8 @@ mybatis:
   mapper-locations:
     classpath:com/ecnu/meethere/user/dao/xml/*.xml,
     classpath:com/ecnu/meethere/news/dao/xml/*.xml,
-    classpath:com/ecnu/meethere/news/comment/dao/xml/*.xml
+    classpath:com/ecnu/meethere/news/comment/dao/xml/*.xml,
+    classpath:com/ecnu/meethere/site/dao/xml/*.xml
   configuration:
     map-underscore-to-camel-case: true
 user-session-info:
@@ -17,3 +18,33 @@ server:
       cookie:
         name: SESSIONID
         http-only: true
+redis:
+  expires:
+    user-vo:
+      expires: 120
+      timeUnit: SECONDS
+      randomRange: 20
+    news:
+      expires: 60
+      timeUnit: SECONDS
+      randomRange: 20
+    news-comment:
+      expires: 60
+      timeUnit: SECONDS
+      randomRange: 20
+    news-page:
+      expires: 3
+      timeUnit: SECONDS
+      randomRange: 0
+    news-comment-page:
+      expires: 3
+      timeUnit: SECONDS
+      randomRange: 0
+    site:
+      expires: 60
+      timeUnit: SECONDS
+      randomRange: 20
+    site-page:
+      expires: 10
+      timeUnit: SECONDS
+      randomRange: 0

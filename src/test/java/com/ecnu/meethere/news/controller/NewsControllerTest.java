@@ -5,6 +5,7 @@ import com.ecnu.meethere.common.result.Result;
 import com.ecnu.meethere.news.param.NewsPublishParam;
 import com.ecnu.meethere.news.param.NewsUpdateParam;
 import com.ecnu.meethere.news.service.NewsService;
+import com.ecnu.meethere.paging.PageParam;
 import com.ecnu.meethere.session.UserSessionInfo;
 import com.ecnu.meethere.user.controller.UserController;
 import com.ecnu.meethere.user.service.UserService;
@@ -28,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import static com.ecnu.meethere.utils.MockMvcTestUtils.jsonSerialize;
 import static com.ecnu.meethere.utils.MockMvcTestUtils.parseMvcResult;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -41,13 +43,15 @@ class NewsControllerTest {
 
     @Value("${user-session-info.name}")
     private String userSessionInfoName;
-    
+
     @Test
     void getNews() throws Exception {
         MvcResult result = mvc.perform(
                 get("/news/get")
                         .param("newsId", "1")
         ).andReturn();
+        verify(newsService).getNews(1L);
+
         Result<Object> res = parseMvcResult(result, null);
         assertEquals(CommonResult.SUCCESS, res.getCode());
     }
@@ -59,6 +63,8 @@ class NewsControllerTest {
                         .param("pageNum", "1")
                         .param("pageSize", "1")
         ).andReturn();
+        verify(newsService).listNewsDigests(new PageParam(1, 1));
+
         Result<Object> res = parseMvcResult(result, null);
         assertEquals(CommonResult.SUCCESS, res.getCode());
 
@@ -74,6 +80,7 @@ class NewsControllerTest {
                         .content(jsonSerialize(publishParam))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
         ).andReturn();
+
 
         assertEquals(CommonResult.UNAUTHORIZED, parseMvcResult(result, null).getCode());
 
@@ -101,6 +108,8 @@ class NewsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .session(session)
         ).andReturn();
+
+        verify(newsService).publishNews(1L, publishParam);
 
         assertEquals(CommonResult.SUCCESS, parseMvcResult(result, null).getCode());
 
@@ -135,6 +144,9 @@ class NewsControllerTest {
                         .session(session)
         ).andReturn();
 
+        verify(newsService).deleteNews(-1L);
+
+
         assertEquals(CommonResult.SUCCESS, parseMvcResult(result, null).getCode());
     }
 
@@ -167,6 +179,9 @@ class NewsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .session(session)
         ).andReturn();
+
+        verify(newsService).updateNews(updateParam);
+
 
         assertEquals(CommonResult.SUCCESS, parseMvcResult(result, null).getCode());
     }

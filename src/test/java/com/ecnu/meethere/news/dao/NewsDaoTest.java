@@ -2,7 +2,6 @@ package com.ecnu.meethere.news.dao;
 
 import com.ecnu.meethere.common.utils.CollectionUtils;
 import com.ecnu.meethere.news.dto.NewsDTO;
-import com.ecnu.meethere.news.dto.NewsDigestDTO;
 import com.ecnu.meethere.news.entity.NewsDO;
 import com.ecnu.meethere.news.param.NewsUpdateParam;
 import com.ecnu.meethere.paging.PageParam;
@@ -47,7 +46,7 @@ class NewsDaoTest {
     @ParameterizedTest
     @MethodSource("listNewsDigestsGen")
     void listNewsDigests(PageParam pageParam, int wSize) {
-        List<Long> newsDigests = newsDao.listNewsDigestsIds(pageParam);
+        List<Long> newsDigests = newsDao.listNewsDigestIds(pageParam);
         assertEquals(wSize, newsDigests.size());
     }
 

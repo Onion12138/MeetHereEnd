@@ -6,9 +6,7 @@ import com.ecnu.meethere.news.dao.NewsDao;
 import com.ecnu.meethere.news.dto.NewsDTO;
 import com.ecnu.meethere.news.dto.NewsDigestDTO;
 import com.ecnu.meethere.paging.PageParam;
-import com.ecnu.meethere.redis.codec.protobuf.ListWrapper;
 import com.ecnu.meethere.redis.codec.protobuf.LongListWrapper;
-import com.ecnu.meethere.redis.codec.protobuf.ProtoStuffCodec;
 import com.ecnu.meethere.redis.core.RedisExpires;
 import com.ecnu.meethere.redis.core.RedisUtils;
 import org.springframework.beans.BeanUtils;
@@ -63,7 +61,7 @@ public class NewsManager {
         return listNewsDigestsByNewsIds(CacheUtils.handleCache(
                 cache,
                 pageParam,
-                newsDao::listNewsDigestsIds,
+                newsDao::listNewsDigestIds,
                 Function.identity(),
                 (pp, c) -> redisUtils.opsForValue().set(redisKey, new LongListWrapper(c),
                         newsPageRedisExpires)

@@ -18,7 +18,7 @@ public interface NewsDao {
 
     int deleteNews(Long id);
 
-    List<Long> listNewsDigestsIds(PageParam pageParam);
+    List<Long> listNewsDigestIds(PageParam pageParam);
 
     List<NewsDTO> listNews(List<Long> newsIds);
 

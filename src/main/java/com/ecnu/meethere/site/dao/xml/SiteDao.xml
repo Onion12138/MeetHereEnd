@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecnu.meethere.site.dao.SiteDao">
+
+    <resultMap id="SiteDTO" type="com.ecnu.meethere.site.dto.SiteDTO">
+        <id property="id" column="id"/>
+        <id property="name" column="name"/>
+        <id property="description" column="description"/>
+        <id property="location" column="location"/>
+        <id property="rent" column="rent"/>
+        <id property="image" column="image"/>
+        <id property="timeCreate" column="time_create"/>
+    </resultMap>
+
+    <insert id="insertSite">
+        insert into site (id, name, description, location, rent, image)
+        values (#{id}, #{name}, #{description}, #{location}, #{rent}, #{image});
+    </insert>
+    <update id="updateSite">
+        update site
+        set
+        <if test="name != null">
+            name = #{name},
+        </if>
+        <if test="description != null">
+            description = #{description},
+        </if>
+        <if test="location != null">
+            location = #{location},
+        </if>
+        <if test="rent != null">
+            rent = #{rent},
+        </if>
+        <if test="image != null">
+            image = #{image},
+        </if>
+        time_modified = current_timestamp
+        where id = #{id}
+    </update>
+    <delete id="deleteSite">
+        delete from site
+        where id = #{id}
+    </delete>
+
+    <select id="getSite" resultMap="SiteDTO">
+        select id,name,description,location,rent,image,time_create
+        from site
+        where id = #{id}
+    </select>
+
+    <select id="listSites" resultMap="SiteDTO">
+        select id,name,description,location,rent,image,time_create
+        from site
+        where
+        <choose>
+            <when test="list != null and list.size() > 0">
+                id in
+                <foreach collection="list" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+                order by field(
+                <foreach collection="list" item="item" open="id," separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="listSiteIds" resultType="java.lang.Long">
+        select id
+        from site
+        order by time_create desc
+        limit ${pageSize * (pageNum - 1)},#{pageSize}
+    </select>
+
+
+</mapper>

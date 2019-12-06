@@ -50,10 +50,10 @@
         from news
         where id = #{newsId}
     </select>
-    <select id="listNewsDigestsIds" resultMap="NewsDigestDTO">
+    <select id="listNewsDigestIds" resultMap="NewsDigestDTO">
         select id
         from news
-        order by time_create
+        order by time_create desc
         limit ${pageSize * (pageNum - 1)},#{pageSize}
     </select>
     <select id="listNews" resultMap="NewsDTO">

@@ -8,6 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedisExpiresConfig {
     @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.user-vo")
+    public RedisExpires userVORedisExpires() {
+        return new RedisExpires();
+    }
+
+    @Bean(initMethod = "init")
     @ConfigurationProperties("redis.expires.news")
     public RedisExpires newsRedisExpires() {
         return new RedisExpires();
@@ -20,20 +26,26 @@ public class RedisExpiresConfig {
     }
 
     @Bean(initMethod = "init")
-    @ConfigurationProperties("redis.expires.news-page")
-    public RedisExpires newsPageRedisExpires() {
-        return new RedisExpires();
-    }
-
-    @Bean(initMethod = "init")
     @ConfigurationProperties("redis.expires.news-comment-page")
     public RedisExpires newsCommentPageRedisExpires() {
         return new RedisExpires();
     }
 
     @Bean(initMethod = "init")
-    @ConfigurationProperties("redis.expires.user-vo")
-    public RedisExpires userVORedisExpires() {
+    @ConfigurationProperties("redis.expires.news-page")
+    public RedisExpires newsPageRedisExpires() {
+        return new RedisExpires();
+    }
+
+    @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.site")
+    public RedisExpires siteRedisExpires() {
+        return new RedisExpires();
+    }
+
+    @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.site-page")
+    public RedisExpires sitePageRedisExpires() {
         return new RedisExpires();
     }
 }

@@ -4,26 +4,3 @@ spring:
     username: root
     password: 189274abcd
     url: jdbc:mysql://127.0.0.1:3306/meethere?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
-
-redis:
-  expires:
-    news:
-      expires: 60
-      timeUnit: SECONDS
-      randomRange: 20
-    news-comment:
-      expires: 60
-      timeUnit: SECONDS
-      randomRange: 20
-    news-page:
-      expires: 3
-      timeUnit: SECONDS
-      randomRange: 0
-    news-comment-page:
-      expires: 3
-      timeUnit: SECONDS
-      randomRange: 0
-    user-vo:
-      expires: 120
-      timeUnit: SECONDS
-      randomRange: 20
