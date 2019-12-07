@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecnu.meethere.order.dao.SiteBookingOrderDao">
+    <resultMap id="SiteBookingOrderDTO"
+               type="com.ecnu.meethere.order.dto.SiteBookingOrderDTO">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="siteId" column="site_id"/>
+        <result property="siteName" column="site_name"/>
+        <result property="siteImage" column="site_image"/>
+        <result property="rent" column="rent"/>
+        <result property="status" column="status"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="timeCreate" column="time_create"/>
+        <result property="timeModified" column="time_modified"/>
+    </resultMap>
+    <insert id="create">
+        insert into site_booking_order (id, user_id, site_id, site_name, site_image, rent, status,
+                                        start_time, end_time)
+        values (#{id}, #{userId}, #{siteId}, #{siteName}, #{siteImage}, #{rent}, #{status},
+                #{startTime}, #{endTime});
+    </insert>
+
+    <update id="updateStatus">
+        update site_booking_order
+        set status = #{newStatus}
+        where id = #{id}
+          and status = #{newStatus}
+    </update>
+
+    <select id="listIdsBySite" resultType="java.lang.Long">
+        select id
+        from site_booking_order
+        where site_id = #{siteId}
+          and status = #{status}
+        order by time_create desc
+        limit ${pageParam.pageSize * (pageParam.pageNum - 1)},#{pageParam.pageSize}
+    </select>
+    <select id="listIdsByUser" resultType="java.lang.Long">
+        select id
+        from site_booking_order
+        where user_id = #{userId}
+          and status = #{status}
+        order by time_create desc
+        limit ${pageParam.pageSize * (pageParam.pageNum - 1)},#{pageParam.pageSize}
+    </select>
+
+    <select id="list" resultMap="SiteBookingOrderDTO">
+        select
+        id,
+        user_id,
+        site_id,
+        site_name,
+        site_image,
+        rent,
+        status,
+        start_time,
+        end_time,
+        time_create,
+        time_modified
+        from site_booking_order
+        where
+        <choose>
+            <when test="list != null and list.size() > 0">
+                id in
+                <foreach collection="list" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+                order by field(
+                <foreach collection="list" item="item" open="id," separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                false
+            </otherwise>
+        </choose>
+    </select>
+    <select id="get" resultMap="SiteBookingOrderDTO">
+        select id,
+               user_id,
+               site_id,
+               site_name,
+               site_image,
+               rent,
+               status,
+               start_time,
+               end_time,
+               time_create,
+               time_modified
+        from site_booking_order
+        where id = #{orderId}
+    </select>
+</mapper>

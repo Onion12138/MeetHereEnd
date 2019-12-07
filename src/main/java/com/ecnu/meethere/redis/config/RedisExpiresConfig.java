@@ -48,4 +48,30 @@ public class RedisExpiresConfig {
     public RedisExpires sitePageRedisExpires() {
         return new RedisExpires();
     }
+
+    @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.site.booked-time-by-day")
+    public RedisExpires siteBookedTimeByDayRedisExpires() {
+        return new RedisExpires();
+    }
+
+
+
+    @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.order.user-page")
+    public RedisExpires userOrderPageRedisExpires() {
+        return new RedisExpires();
+    }
+
+    @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.order.site-page")
+    public RedisExpires siteOrderPageRedisExpires() {
+        return new RedisExpires();
+    }
+
+    @Bean(initMethod = "init")
+    @ConfigurationProperties("redis.expires.order")
+    public RedisExpires orderRedisExpires() {
+        return new RedisExpires();
+    }
 }

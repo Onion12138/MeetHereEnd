@@ -16,25 +16,25 @@
         <result property="avatar" column="avatar"/>
     </resultMap>
 
-    <insert id="insertUser">
+    <insert id="insert">
         insert into user (id, username, password)
         values (#{id}, #{username}, #{password});
     </insert>
 
-    <select id="getUserByUsername" resultMap="UserDTO">
+    <select id="getByUsername" resultMap="UserDTO">
         select id, username, password, avatar, is_administrator
         from user
         where username = #{username}
     </select>
-    <select id="isUserExistById" resultType="java.lang.Boolean">
+    <select id="exist" resultType="java.lang.Boolean">
         select ifnull((select true from user where id = #{id}), false)
     </select>
-    <select id="getUserVO" resultMap="UserVO">
+    <select id="get" resultMap="UserVO">
         select id, username, avatar
         from user
         where id = #{id}
     </select>
-    <select id="listUserVOs" resultMap="UserVO">
+    <select id="list" resultMap="UserVO">
         select id, username, avatar
         from user
         where

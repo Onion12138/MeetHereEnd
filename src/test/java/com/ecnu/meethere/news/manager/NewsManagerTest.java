@@ -55,23 +55,23 @@ class NewsManagerTest {
 
     @Test
     void getNews() {
-        when(newsDao.getNews(-1L)).thenReturn(
+        when(newsDao.get(-1L)).thenReturn(
                 new NewsDTO(-1L, 1L, "t", "", "c", LocalDateTime.now())
         );
         NewsDTO news = newsManager.getNews(-1L);
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(news));
-        verify(newsDao, times(1)).getNews(anyLong());
+        verify(newsDao, times(1)).get(anyLong());
 
         newsManager.getNews(-1L);
-        verify(newsDao, times(1)).getNews(anyLong());//走缓存，不走数据库
+        verify(newsDao, times(1)).get(anyLong());//走缓存，不走数据库
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(news));
     }
 
     @Test
     void listNewsDigests() {
-        when(newsDao.listNews(List.of(-1L))).thenReturn(
+        when(newsDao.list(List.of(-1L))).thenReturn(
                 List.of(new NewsDTO(-1L, 1L, "t", "", "c", LocalDateTime.now())));
-        when(newsDao.listNewsDigestIds(any())).thenReturn(List.of(-1L));
+        when(newsDao.listIds(any())).thenReturn(List.of(-1L));
 
         //缓存不命中
         List<NewsDigestDTO> newsDigests = newsManager.listNewsDigests(new PageParam(1, 1));
@@ -83,12 +83,12 @@ class NewsManagerTest {
         assertEquals(1, newsDigests1.size());
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(newsDigests1.get(0)));
 
-        verify(newsDao, times(1)).listNewsDigestIds(any());
+        verify(newsDao, times(1)).listIds(any());
     }
 
     @Test
     void listNewsDigestsByNewsIds() {
-        when(newsDao.listNews(List.of(-1L, -2L))).thenReturn(
+        when(newsDao.list(List.of(-1L, -2L))).thenReturn(
                 List.of(
                         new NewsDTO(-1L, 1L, "t", "", "c", LocalDateTime.now()),
                         new NewsDTO(-2L, 1L, "t", "", "c", LocalDateTime.now())
@@ -99,25 +99,25 @@ class NewsManagerTest {
         assertArrayEquals(new Long[]{-1L, -2L},
                 newsManager.listNewsDigestsByNewsIds(List.of(-1L, -2L)).stream().map(NewsDigestDTO::getId).toArray());
 
-        verify(newsDao, times(1)).listNews(anyList());
+        verify(newsDao, times(1)).list(anyList());
 
         //缓存命中
         assertArrayEquals(new Long[]{-1L, -2L},
                 newsManager.listNewsDigestsByNewsIds(List.of(-1L, -2L)).stream().map(NewsDigestDTO::getId).toArray());
 
-        verify(newsDao, times(1)).listNews(anyList());
+        verify(newsDao, times(1)).list(anyList());
 
         //缓存命中
         assertArrayEquals(new Long[]{-1L},
                 newsManager.listNewsDigestsByNewsIds(List.of(-1L)).stream().map(NewsDigestDTO::getId).toArray());
 
-        verify(newsDao, times(1)).listNews(anyList());
+        verify(newsDao, times(1)).list(anyList());
 
         reset(newsDao);
 
         //缓存不命中
 
-        when(newsDao.listNews(List.of(-3L))).thenReturn(
+        when(newsDao.list(List.of(-3L))).thenReturn(
                 List.of(
                         new NewsDTO(-3L, 1L, "t", "", "c", LocalDateTime.now())
                         )
@@ -128,14 +128,14 @@ class NewsManagerTest {
         assertArrayEquals(new Long[]{-1L, -2L, -3L},
                 newsManager.listNewsDigestsByNewsIds(List.of(-1L, -2L, -3L)).stream().map(NewsDigestDTO::getId).toArray());
 
-        verify(newsDao, times(1)).listNews(anyList());
+        verify(newsDao, times(1)).list(anyList());
 
         //缓存命中
 
         assertArrayEquals(new Long[]{-2L, -3L},
                 newsManager.listNewsDigestsByNewsIds(List.of(-2L, -3L)).stream().map(NewsDigestDTO::getId).toArray());
 
-        verify(newsDao, times(1)).listNews(anyList());
+        verify(newsDao, times(1)).list(anyList());
 
 
     }

@@ -11,13 +11,13 @@ import java.util.List;
 @Mapper
 @Repository
 public interface UserDao {
-    UserDTO getUserByUsername(String username);
+    UserDTO getByUsername(String username);
 
-    UserVO getUserVO(Long id);
+    UserVO get(Long id);
 
-    List<UserVO> listUserVOs(List<Long> id);
+    List<UserVO> list(List<Long> id);
 
-    int insertUser(UserDO userDO);
+    int insert(UserDO userDO);
 
-    boolean isUserExistById(Long id);
+    boolean exist(Long id);
 }

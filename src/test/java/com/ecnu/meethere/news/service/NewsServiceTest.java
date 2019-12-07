@@ -5,7 +5,6 @@ import com.ecnu.meethere.common.idgenerator.SnowflakeIdGenerator;
 import com.ecnu.meethere.news.dao.NewsDao;
 import com.ecnu.meethere.news.dto.NewsDTO;
 import com.ecnu.meethere.news.dto.NewsDigestDTO;
-import com.ecnu.meethere.news.entity.NewsDO;
 import com.ecnu.meethere.news.manager.NewsManager;
 import com.ecnu.meethere.news.param.NewsPublishParam;
 import com.ecnu.meethere.news.vo.NewsDigestVO;
@@ -13,17 +12,14 @@ import com.ecnu.meethere.paging.PageParam;
 import com.ecnu.meethere.user.service.UserService;
 import com.ecnu.meethere.user.vo.UserVO;
 import com.ecnu.meethere.utils.ReflectionTestUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,13 +47,13 @@ class NewsServiceTest {
     void publishNews() {
         newsService.publishNews(-1L,
                 new NewsPublishParam().setTitle("title").setImage("image").setContent("content"));
-        verify(newsDao, times(1)).insertNews(any());
+        verify(newsDao, times(1)).insert(any());
     }
 
     @Test
     void deleteNews() {
         newsService.deleteNews(-1L);
-        verify(newsDao, times(1)).deleteNews(anyLong());
+        verify(newsDao, times(1)).delete(anyLong());
 
     }
 

@@ -36,11 +36,11 @@ public class NewsService {
     private IdGenerator idGenerator;
 
     public void publishNews(Long userId, NewsPublishParam newsPublishParam) {
-        newsDao.insertNews(convertToNewsDO(userId, newsPublishParam));
+        newsDao.insert(convertToNewsDO(userId, newsPublishParam));
     }
 
     public void deleteNews(Long id) {
-        newsDao.deleteNews(id);
+        newsDao.delete(id);
     }
 
     private NewsDO convertToNewsDO(Long userId, NewsPublishParam newsPublishParam) {
@@ -79,6 +79,6 @@ public class NewsService {
     }
 
     public void updateNews(NewsUpdateParam updateParam) {
-        newsDao.updateNews(updateParam);
+        newsDao.update(updateParam);
     }
 }

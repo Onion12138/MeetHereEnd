@@ -2,7 +2,6 @@ package com.ecnu.meethere.news.comment.service;
 
 import com.ecnu.meethere.common.idgenerator.IdGenerator;
 import com.ecnu.meethere.common.idgenerator.SnowflakeIdGenerator;
-import com.ecnu.meethere.common.utils.CollectionUtils;
 import com.ecnu.meethere.news.comment.dao.NewsCommentDao;
 import com.ecnu.meethere.news.comment.dto.NewsCommentDTO;
 import com.ecnu.meethere.news.comment.entity.NewsCommentDO;
@@ -10,7 +9,6 @@ import com.ecnu.meethere.news.comment.manager.NewsCommentManager;
 import com.ecnu.meethere.news.comment.param.NewsCommentPostParam;
 import com.ecnu.meethere.news.comment.param.NewsCommentUpdateParam;
 import com.ecnu.meethere.news.comment.vo.NewsCommentVO;
-import com.ecnu.meethere.news.dao.NewsDao;
 import com.ecnu.meethere.paging.PageParam;
 import com.ecnu.meethere.user.service.UserService;
 import com.ecnu.meethere.user.vo.UserVO;
@@ -53,7 +51,7 @@ class NewsCommentServiceTest {
 
     @Test
     void postComment() {
-        when(newsCommentDao.insertComment(any())).thenAnswer(invocation -> {
+        when(newsCommentDao.insert(any())).thenAnswer(invocation -> {
             NewsCommentDO newsCommentDO = invocation.getArgument(0);
             assertNotNull(newsCommentDO.getId());
             assertNotNull(newsCommentDO.getNewsId());
@@ -90,7 +88,7 @@ class NewsCommentServiceTest {
                        NewsCommentUpdateParam updateParam, int wTimes) {
         when(newsCommentManager.getComment(anyLong())).thenReturn(new NewsCommentDTO().setId(-1L).setUserId(-1L));
         newsCommentService.updateComment(userId, isAdministrator, updateParam);
-        verify(newsCommentDao, times(wTimes)).updateComment(any());
+        verify(newsCommentDao, times(wTimes)).update(any());
     }
 
     static Stream<Arguments> updateCommentGen() {
@@ -107,7 +105,7 @@ class NewsCommentServiceTest {
                        Long id, int wTimes) {
         when(newsCommentManager.getComment(anyLong())).thenReturn(new NewsCommentDTO().setId(-1L).setUserId(-1L));
         newsCommentService.deleteComment(userId, isAdministrator, id);
-        verify(newsCommentDao, times(wTimes)).deleteComment(any());
+        verify(newsCommentDao, times(wTimes)).delete(any());
     }
 
     static Stream<Arguments> deleteCommentGen() {

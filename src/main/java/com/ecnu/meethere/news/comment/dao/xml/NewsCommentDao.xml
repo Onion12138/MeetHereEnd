@@ -4,17 +4,17 @@
 <mapper namespace="com.ecnu.meethere.news.comment.dao.NewsCommentDao">
     <resultMap id="NewsCommentDTO" type="com.ecnu.meethere.news.comment.dto.NewsCommentDTO">
         <id property="id" column="id"/>
-        <id property="userId" column="user_id"/>
-        <id property="content" column="content"/>
-        <id property="timeCreate" column="time_create"/>
+        <result property="userId" column="user_id"/>
+        <result property="content" column="content"/>
+        <result property="timeCreate" column="time_create"/>
     </resultMap>
 
-    <insert id="insertComment">
+    <insert id="insert">
         insert into news_comment (id, news_id, user_id, content)
         values (#{id}, #{newsId}, #{userId}, #{content});
     </insert>
 
-    <update id="updateComment">
+    <update id="update">
         update news_comment
         set
         <if test="content != null">
@@ -24,13 +24,13 @@
         where id = #{id}
     </update>
 
-    <delete id="deleteComment">
+    <delete id="delete">
         delete
         from news_comment
         where id = #{id}
     </delete>
 
-    <select id="listCommentIdsByPage" resultType="java.lang.Long">
+    <select id="listIds" resultType="java.lang.Long">
         select id
         from news_comment
         where news_id = #{newsId}
@@ -38,7 +38,7 @@
         limit ${pageParam.pageSize * (pageParam.pageNum - 1)},#{pageParam.pageSize}
     </select>
 
-    <select id="listCommentsByIds"
+    <select id="list"
             resultMap="NewsCommentDTO">
         select id, user_id, content, time_create
         from news_comment
@@ -59,7 +59,7 @@
             </otherwise>
         </choose>
     </select>
-    <select id="getComment" resultMap="NewsCommentDTO">
+    <select id="get" resultMap="NewsCommentDTO">
         select id, user_id, content, time_create
         from news_comment
         where id = #{id}

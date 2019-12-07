@@ -12,8 +12,6 @@ import com.ecnu.meethere.user.param.LoginParam;
 import com.ecnu.meethere.user.param.RegisterParam;
 import com.ecnu.meethere.user.vo.UserVO;
 import com.ecnu.meethere.utils.ReflectionTestUtils;
-import com.mysql.cj.log.Log;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -49,7 +47,7 @@ class UserServiceTest {
     private IdGenerator idGenerator = new SnowflakeIdGenerator(0, 0);
 
     void before() {
-        when(userDao.getUserByUsername(anyString()))
+        when(userDao.getByUsername(anyString()))
                 .thenAnswer(invocation -> {
                     switch (((String) invocation.getArgument(0))) {
                         case "testu":

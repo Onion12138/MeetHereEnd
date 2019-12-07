@@ -14,15 +14,15 @@ import java.util.List;
 @Mapper
 @Repository
 public interface NewsDao {
-    int insertNews(NewsDO newsDO);
+    int insert(NewsDO newsDO);
 
-    int deleteNews(Long id);
+    int delete(Long id);
 
-    List<Long> listNewsDigestIds(PageParam pageParam);
+    List<Long> listIds(PageParam pageParam);
 
-    List<NewsDTO> listNews(List<Long> newsIds);
+    List<NewsDTO> list(List<Long> newsIds);
 
-    NewsDTO getNews(Long newsId);
+    NewsDTO get(Long newsId);
 
-    int updateNews(NewsUpdateParam updateParam);
+    int update(NewsUpdateParam updateParam);
 }

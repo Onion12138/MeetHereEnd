@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,15 +29,15 @@ class NewsCommentDaoTest {
     @BeforeEach
     void insertTestData() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
-        newsCommentDao.insertComment(new NewsCommentDO(-1L, 1L, 1L, "", now, now));
-        newsCommentDao.insertComment(new NewsCommentDO(-2L, 1L, 1L, "", now, now));
-        newsCommentDao.insertComment(new NewsCommentDO(-3L, 1L, 1L, "", now, now));
+        newsCommentDao.insert(new NewsCommentDO(-1L, 1L, 1L, "", now, now));
+        newsCommentDao.insert(new NewsCommentDO(-2L, 1L, 1L, "", now, now));
+        newsCommentDao.insert(new NewsCommentDO(-3L, 1L, 1L, "", now, now));
     }
 
     @ParameterizedTest
     @MethodSource("listCommentIdsByPageGen")
     void listCommentIdsByPage(PageParam pageParam, int wSize) {
-        List<Long> commentIds = newsCommentDao.listCommentIdsByPage(1L, pageParam);
+        List<Long> commentIds = newsCommentDao.listIds(1L, pageParam);
         assertEquals(wSize, commentIds.size());
     }
 
@@ -55,7 +54,7 @@ class NewsCommentDaoTest {
     @ParameterizedTest
     @MethodSource("listCommentIdsGen")
     void listCommentIds(List<Long> commentIds, int wSize) {
-        List<NewsCommentDTO> comments = newsCommentDao.listCommentsByIds(commentIds);
+        List<NewsCommentDTO> comments = newsCommentDao.list(commentIds);
         assertEquals(wSize, comments.size());
     }
 
@@ -72,20 +71,20 @@ class NewsCommentDaoTest {
 
     @Test
     void deleteComment() {
-        assertEquals(1, newsCommentDao.deleteComment(-1L));
-        assertEquals(0, newsCommentDao.deleteComment(0L));
+        assertEquals(1, newsCommentDao.delete(-1L));
+        assertEquals(0, newsCommentDao.delete(0L));
     }
 
     @Test
     void updateComment() {
-        assertEquals(1, newsCommentDao.updateComment(new NewsCommentUpdateParam(-1L, "")));
-        assertEquals(1, newsCommentDao.updateComment(new NewsCommentUpdateParam(-1L, null)));
-        assertEquals(0, newsCommentDao.updateComment(new NewsCommentUpdateParam(0L, null)));
+        assertEquals(1, newsCommentDao.update(new NewsCommentUpdateParam(-1L, "")));
+        assertEquals(1, newsCommentDao.update(new NewsCommentUpdateParam(-1L, null)));
+        assertEquals(0, newsCommentDao.update(new NewsCommentUpdateParam(0L, null)));
     }
 
     @Test
     void getComment() {
-        assertNotNull(newsCommentDao.getComment(-1L));
-        assertNull(newsCommentDao.getComment(0L));
+        assertNotNull(newsCommentDao.get(-1L));
+        assertNull(newsCommentDao.get(0L));
     }
 }

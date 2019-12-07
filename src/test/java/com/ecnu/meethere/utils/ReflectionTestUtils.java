@@ -9,6 +9,10 @@ import java.util.List;
 public class ReflectionTestUtils {
     public static <T> boolean isAllFieldsNotNull(T o) {
         if (o == null) return true;
+
+        if (o.getClass().getName().startsWith("java"))
+            return true;
+
         return Reflect.on(o).fields().values().stream()
                 .allMatch(f -> f.get() != null);
     }
@@ -17,7 +21,11 @@ public class ReflectionTestUtils {
         if (list == null || list.size() == 0)
             return true;
         return list.stream().map(Reflect::on).allMatch(
-                o -> o.fields().values().stream().allMatch(f -> f.get() != null)
+                o -> {
+                    if (o.getClass().getName().startsWith("java"))
+                        return true;
+                    return o.fields().values().stream().allMatch(f -> f.get() != null);
+                }
         );
     }
 }

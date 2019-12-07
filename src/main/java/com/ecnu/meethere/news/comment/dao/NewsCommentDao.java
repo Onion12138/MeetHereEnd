@@ -13,16 +13,16 @@ import java.util.List;
 @Mapper
 @Repository
 public interface NewsCommentDao {
-    int insertComment(NewsCommentDO newsCommentDO);
+    int insert(NewsCommentDO newsCommentDO);
 
-    List<Long> listCommentIdsByPage(@Param("newsId") Long newsId,
-                                    @Param("pageParam") PageParam pageParam);
+    List<Long> listIds(@Param("newsId") Long newsId,
+                       @Param("pageParam") PageParam pageParam);
 
-    List<NewsCommentDTO> listCommentsByIds(List<Long> commentIds);
+    List<NewsCommentDTO> list(List<Long> commentIds);
 
-    int deleteComment(Long id);
+    int delete(Long id);
 
-    int updateComment(NewsCommentUpdateParam updateParam);
+    int update(NewsCommentUpdateParam updateParam);
 
-    NewsCommentDTO getComment(Long id);
+    NewsCommentDTO get(Long id);
 }

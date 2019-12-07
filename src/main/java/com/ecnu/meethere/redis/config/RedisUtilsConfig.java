@@ -16,7 +16,6 @@ public class RedisUtilsConfig {
     @Bean
     public RedisTemplate<String, byte[]> redisUtilsTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, byte[]> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.setEnableDefaultSerializer(false);
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());

@@ -1,7 +1,5 @@
 package com.ecnu.meethere.user.manager;
 
-import com.ecnu.meethere.news.dto.NewsDTO;
-import com.ecnu.meethere.news.manager.NewsManager;
 import com.ecnu.meethere.redis.config.RedisExpiresConfig;
 import com.ecnu.meethere.redis.config.RedisUtilsConfig;
 import com.ecnu.meethere.redis.core.RedisUtils;
@@ -19,9 +17,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -56,21 +52,21 @@ class UserManagerTest {
 
     @Test
     void getUserVO() {
-        when(userDao.getUserVO(-1L)).thenReturn(
+        when(userDao.get(-1L)).thenReturn(
                 new UserVO().setId(-1L).setUsername("123").setAvatar("456")
         );
         UserVO user = userManager.getUserVO(-1L);
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(user));
-        verify(userDao, times(1)).getUserVO(anyLong());
+        verify(userDao, times(1)).get(anyLong());
 
         userManager.getUserVO(-1L);
-        verify(userDao, times(1)).getUserVO(anyLong());//走缓存，不走数据库
+        verify(userDao, times(1)).get(anyLong());//走缓存，不走数据库
         assertTrue(ReflectionTestUtils.isAllFieldsNotNull(user));
     }
 
     @Test
     void listUserVOs() {
-        when(userDao.listUserVOs(List.of(-1L))).thenReturn(
+        when(userDao.list(List.of(-1L))).thenReturn(
                 List.of(new UserVO(-1L, "", ""))
         );
 
@@ -78,17 +74,17 @@ class UserManagerTest {
         assertArrayEquals(new Long[]{-1L},
                 userManager.listUserVOs(List.of(-1L)).stream().map(UserVO::getId).toArray(Long[]::new));
 
-        verify(userDao, times(1)).listUserVOs(anyList());
+        verify(userDao, times(1)).list(anyList());
 
         //缓存命中
         assertArrayEquals(new Long[]{-1L},
                 userManager.listUserVOs(List.of(-1L)).stream().map(UserVO::getId).toArray(Long[]::new));
 
-        verify(userDao, times(1)).listUserVOs(anyList());
+        verify(userDao, times(1)).list(anyList());
 
         reset(userDao);
 
-        when(userDao.listUserVOs(List.of(-2L))).thenReturn(
+        when(userDao.list(List.of(-2L))).thenReturn(
                 List.of(new UserVO(-2L, "", ""))
         );
 
@@ -96,12 +92,12 @@ class UserManagerTest {
         assertArrayEquals(new Long[]{-1L,-2L},
                 userManager.listUserVOs(List.of(-1L,-2L)).stream().map(UserVO::getId).toArray(Long[]::new));
 
-        verify(userDao, times(1)).listUserVOs(List.of(-2L));
+        verify(userDao, times(1)).list(List.of(-2L));
 
         //缓存命中
         assertArrayEquals(new Long[]{-1L,-2L},
                 userManager.listUserVOs(List.of(-1L,-2L)).stream().map(UserVO::getId).toArray(Long[]::new));
 
-        verify(userDao, times(1)).listUserVOs(List.of(-2L));
+        verify(userDao, times(1)).list(List.of(-2L));
     }
 }

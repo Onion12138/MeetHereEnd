@@ -4,26 +4,26 @@
 <mapper namespace="com.ecnu.meethere.news.dao.NewsDao">
     <resultMap id="NewsDTO" type="com.ecnu.meethere.news.dto.NewsDTO">
         <id property="id" column="id"/>
-        <id property="userId" column="user_id"/>
-        <id property="title" column="title"/>
-        <id property="image" column="image"/>
-        <id property="content" column="content"/>
-        <id property="timeCreate" column="time_create"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="image" column="image"/>
+        <result property="content" column="content"/>
+        <result property="timeCreate" column="time_create"/>
     </resultMap>
     <resultMap id="NewsDigestDTO" type="com.ecnu.meethere.news.dto.NewsDigestDTO">
         <id property="id" column="id"/>
-        <id property="userId" column="user_id"/>
-        <id property="title" column="title"/>
-        <id property="image" column="image"/>
-        <id property="timeCreate" column="time_create"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="image" column="image"/>
+        <result property="timeCreate" column="time_create"/>
     </resultMap>
 
 
-    <insert id="insertNews">
+    <insert id="insert">
         insert into news (id, user_id, title, image, content)
         values (#{id}, #{userId}, #{title}, #{image}, #{content});
     </insert>
-    <update id="updateNews">
+    <update id="update">
         update news
         set
             <if test="title != null">
@@ -39,24 +39,24 @@
         where id = #{id}
     </update>
 
-    <delete id="deleteNews">
+    <delete id="delete">
         delete
         from news
         where id = #{id}
     </delete>
 
-    <select id="getNews" resultMap="NewsDTO">
+    <select id="get" resultMap="NewsDTO">
         select id, user_id, title, image, content, time_create
         from news
         where id = #{newsId}
     </select>
-    <select id="listNewsDigestIds" resultMap="NewsDigestDTO">
+    <select id="listIds" resultMap="NewsDigestDTO">
         select id
         from news
         order by time_create desc
         limit ${pageSize * (pageNum - 1)},#{pageSize}
     </select>
-    <select id="listNews" resultMap="NewsDTO">
+    <select id="list" resultMap="NewsDTO">
         select id, user_id, title, image, content, time_create
         from news
         where

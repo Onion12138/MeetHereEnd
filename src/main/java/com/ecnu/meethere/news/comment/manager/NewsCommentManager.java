@@ -41,7 +41,7 @@ public class NewsCommentManager {
         return listCommentsByIds(CacheUtils.handleCache(
                 cache,
                 new Tuple<>(newsId, pageParam),
-                tuple -> newsCommentDao.listCommentIdsByPage(tuple.getFirst(), tuple.getSecond()),
+                tuple -> newsCommentDao.listIds(tuple.getFirst(), tuple.getSecond()),
                 Function.identity(),
                 (tuple, c) -> redisUtils.opsForValue().set(redisKey, new LongListWrapper(c),
                         newsCommentPageRedisExpires)
@@ -55,7 +55,7 @@ public class NewsCommentManager {
         return CacheUtils.handleCache(
                 cache,
                 id,
-                newsCommentDao::getComment,
+                newsCommentDao::get,
                 Function.identity(),
                 (i, n) -> redisUtils.opsForValue().set(redisKey, n)
         );
@@ -69,7 +69,7 @@ public class NewsCommentManager {
         return CacheUtils.handleBatchCache(
                 cache,
                 commentIds,
-                newsCommentDao::listCommentsByIds,
+                newsCommentDao::list,
                 Function.identity(),
                 (c, d) -> {
                     List<String> missCacheRedisKeys =

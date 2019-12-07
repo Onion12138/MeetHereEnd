@@ -32,7 +32,7 @@ public class UserManager {
         return CacheUtils.handleCache(
                 user,
                 id,
-                userDao::getUserVO,
+                userDao::get,
                 Function.identity(),
                 (i, u) -> redisUtils.opsForValue().set(redisKey, u)
         );
@@ -45,7 +45,7 @@ public class UserManager {
         return CacheUtils.handleBatchCache(
                 caches,
                 ids,
-                userDao::listUserVOs,
+                userDao::list,
                 Function.identity(),
                 (missCache, missData) -> redisUtils.opsForValue().multiSet(
                         missCache.stream().map(c->getUserRedisKey(c.getId())).collect(Collectors.toList()),

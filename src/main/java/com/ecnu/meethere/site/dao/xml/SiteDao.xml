@@ -5,12 +5,12 @@
 
     <resultMap id="SiteDTO" type="com.ecnu.meethere.site.dto.SiteDTO">
         <id property="id" column="id"/>
-        <id property="name" column="name"/>
-        <id property="description" column="description"/>
-        <id property="location" column="location"/>
-        <id property="rent" column="rent"/>
-        <id property="image" column="image"/>
-        <id property="timeCreate" column="time_create"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="location" column="location"/>
+        <result property="rent" column="rent"/>
+        <result property="image" column="image"/>
+        <result property="timeCreate" column="time_create"/>
     </resultMap>
 
     <insert id="insertSite">

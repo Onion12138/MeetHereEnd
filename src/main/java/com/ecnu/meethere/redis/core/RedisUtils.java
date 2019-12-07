@@ -44,6 +44,10 @@ public class RedisUtils implements InitializingBean {
         return redisTemplate.exec();
     }
 
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
+
     //测试用
     public void flushAll(){
         redisTemplate.delete(redisTemplate.keys("*"));

@@ -34,7 +34,7 @@ public class NewsCommentService {
     private UserService userService;
 
     public void postComment(Long userId, NewsCommentPostParam postParam) {
-        newsCommentDao.insertComment(convertToNewsCommentDO(userId, postParam));
+        newsCommentDao.insert(convertToNewsCommentDO(userId, postParam));
     }
 
     private NewsCommentDO convertToNewsCommentDO(Long userId, NewsCommentPostParam postParam) {
@@ -65,7 +65,7 @@ public class NewsCommentService {
     public void updateComment(Long userId, boolean isAdministrator,
                               NewsCommentUpdateParam updateParam) {
         if (isAdministrator) {
-            newsCommentDao.updateComment(updateParam);
+            newsCommentDao.update(updateParam);
             return;
         }
 
@@ -75,12 +75,12 @@ public class NewsCommentService {
             return;
         }
 
-        newsCommentDao.updateComment(updateParam);
+        newsCommentDao.update(updateParam);
     }
 
     public void deleteComment(Long userId, boolean isAdministrator, Long id) {
         if (isAdministrator) {
-            newsCommentDao.deleteComment(id);
+            newsCommentDao.delete(id);
             return;
         }
 
@@ -90,7 +90,7 @@ public class NewsCommentService {
             return;
         }
 
-        newsCommentDao.deleteComment(id);
+        newsCommentDao.delete(id);
 
     }
 

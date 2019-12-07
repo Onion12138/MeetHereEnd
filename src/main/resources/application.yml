@@ -7,7 +7,9 @@ mybatis:
     classpath:com/ecnu/meethere/user/dao/xml/*.xml,
     classpath:com/ecnu/meethere/news/dao/xml/*.xml,
     classpath:com/ecnu/meethere/news/comment/dao/xml/*.xml,
-    classpath:com/ecnu/meethere/site/dao/xml/*.xml
+    classpath:com/ecnu/meethere/site/dao/xml/*.xml,
+    classpath:com/ecnu/meethere/site/bookingtime/dao/xml/*.xml,
+    classpath:com/ecnu/meethere/order/dao/xml/*.xml
   configuration:
     map-underscore-to-camel-case: true
 user-session-info:
@@ -44,7 +46,24 @@ redis:
       expires: 60
       timeUnit: SECONDS
       randomRange: 20
+      booked-time-by-day:
+        expires: 30
+        timeUnit: SECONDS
+        randomRange: 10
     site-page:
       expires: 10
       timeUnit: SECONDS
       randomRange: 0
+    order:
+      expires: 60
+      timeUnit: SECONDS
+      randomRange: 20
+      user-page:
+        expires: 3
+        timeUnit: SECONDS
+        randomRange: 0
+      site-page:
+        expires: 3
+        timeUnit: SECONDS
+        randomRange: 0
+

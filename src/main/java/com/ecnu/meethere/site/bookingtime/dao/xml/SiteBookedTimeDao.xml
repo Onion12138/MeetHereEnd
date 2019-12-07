@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecnu.meethere.site.bookingtime.dao.SiteBookedTimeDao">
+    <resultMap id="SiteBookedTimeDTO"
+               type="com.ecnu.meethere.site.bookingtime.dto.SiteBookedTimeDTO">
+        <id property="id" column="id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+    </resultMap>
+
+    <insert id="insert">
+        insert into site_booked_time (id, site_id, start_time, end_time)
+        values (#{id}, #{siteId}, #{startTime}, #{endTime})
+    </insert>
+
+    <delete id="deleteByStartTime">
+        delete from site_booked_time
+        where site_id = #{siteId} and start_time = #{startTime}
+    </delete>
+
+
+    <select id="listByStartTime" resultMap="SiteBookedTimeDTO">
+        select id, start_time, end_time
+        from site_booked_time
+        where site_id = #{siteId} and start_time between #{startTime} and  #{endTime}
+        order by start_time
+    </select>
+
+    <select id="hasConflict" resultType="java.lang.Boolean">
+        (
+            select true
+            from site_booked_time
+            where site_id = #{siteId}
+              and ((end_time > #{startTime} and
+                    end_time <![CDATA[ <= ]]> #{endTime}))
+            lock in share mode
+        )
+        union
+        (
+            select true
+            from site_booked_time
+            where site_id = 1
+              and ((start_time >= #{startTime} and
+                    start_time <![CDATA[ < ]]> #{endTime}))
+            lock in share mode
+        )
+    </select>
+
+</mapper>

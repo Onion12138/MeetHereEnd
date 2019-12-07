@@ -53,8 +53,8 @@ class NewsCommentManagerTest {
 
     @Test
     void listComments() {
-        when(newsCommentDao.listCommentIdsByPage(anyLong(), any())).thenReturn(List.of(-1L, -2L));
-        when(newsCommentDao.listCommentsByIds(List.of(-1L, -2L))).thenReturn(List.of(
+        when(newsCommentDao.listIds(anyLong(), any())).thenReturn(List.of(-1L, -2L));
+        when(newsCommentDao.list(List.of(-1L, -2L))).thenReturn(List.of(
                 new NewsCommentDTO(-1L, 1L, "", null),
                 new NewsCommentDTO(-2L, 1L, "", null)
         ));
@@ -70,13 +70,13 @@ class NewsCommentManagerTest {
                 new PageParam(1, 2));
 
         assertEquals(2, newsComments1.size());
-        verify(newsCommentDao, times(1)).listCommentsByIds(List.of(-1L, -2L));
+        verify(newsCommentDao, times(1)).list(List.of(-1L, -2L));
 
     }
 
     @Test
     void listCommentsByIds() {
-        when(newsCommentDao.listCommentsByIds(List.of(-1L, -2L))).thenReturn(List.of(
+        when(newsCommentDao.list(List.of(-1L, -2L))).thenReturn(List.of(
                 new NewsCommentDTO(-1L, 1L, "", null),
                 new NewsCommentDTO(-2L, 1L, "", null)
         ));
@@ -89,10 +89,10 @@ class NewsCommentManagerTest {
         assertArrayEquals(new Long[]{-1L, -2L},
                 newsCommentManager.listCommentsByIds(List.of(-1L, -2L)).stream().map(NewsCommentDTO::getId).toArray());
 
-        verify(newsCommentDao, times(1)).listCommentsByIds(List.of(-1L, -2L));
+        verify(newsCommentDao, times(1)).list(List.of(-1L, -2L));
 
         reset(newsCommentDao);
-        when(newsCommentDao.listCommentsByIds(List.of(-3L))).thenReturn(List.of(
+        when(newsCommentDao.list(List.of(-3L))).thenReturn(List.of(
                 new NewsCommentDTO(-3L, 1L, "", null)
         ));
 
@@ -104,14 +104,14 @@ class NewsCommentManagerTest {
         assertArrayEquals(new Long[]{-1L, -2L, -3L},
                 newsCommentManager.listCommentsByIds(List.of(-1L, -2L, -3L)).stream().map(NewsCommentDTO::getId).toArray());
 
-        verify(newsCommentDao, times(1)).listCommentsByIds(List.of(-3L));
+        verify(newsCommentDao, times(1)).list(List.of(-3L));
 
 
     }
 
     @Test
     void getComment() {
-        when(newsCommentDao.getComment(-1L)).thenReturn((
+        when(newsCommentDao.get(-1L)).thenReturn((
                 new NewsCommentDTO(-1L, 1L, "", null)
         ));
 
@@ -119,7 +119,7 @@ class NewsCommentManagerTest {
 
         assertEquals(-1L, newsCommentManager.getComment(-1L).getId());
 
-        verify(newsCommentDao, times(1)).getComment(-1L);
+        verify(newsCommentDao, times(1)).get(-1L);
 
     }
 }

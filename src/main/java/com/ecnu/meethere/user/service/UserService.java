@@ -33,7 +33,7 @@ public class UserService {
         String username = loginParam.getUsername();
         String password = loginParam.getPassword();
 
-        UserDTO userDTO = userDao.getUserByUsername(username);
+        UserDTO userDTO = userDao.getByUsername(username);
         if (userDTO == null)
             throw new UsernameNotExistsException();
 
@@ -53,7 +53,7 @@ public class UserService {
         String username = registerParam.getUsername();
         String password = registerParam.getPassword();
 
-        if (userDao.getUserByUsername(username) != null)
+        if (userDao.getByUsername(username) != null)
             throw new UsernameAlreadyExistException();
 
         UserDO userDO = new UserDO()
@@ -61,7 +61,7 @@ public class UserService {
                 .setUsername(username)
                 .setPassword(password);
 
-        userDao.insertUser(userDO);
+        userDao.insert(userDO);
     }
 
     public UserVO getUserVO(Long userId) {

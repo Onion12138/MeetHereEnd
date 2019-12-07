@@ -45,6 +45,26 @@ create table site
     time_modified datetime default CURRENT_TIMESTAMP not null
 );
 
+create index idx_time_create
+    on site (time_create);
+
+create table site_booked_time
+(
+    id bigint not null
+        primary key,
+    site_id bigint not null,
+    start_time datetime not null,
+    end_time datetime not null,
+    time_create datetime default CURRENT_TIMESTAMP not null,
+    time_modified datetime default CURRENT_TIMESTAMP not null
+);
+
+create index idx_site_id_end_time
+    on site_booked_time (site_id, end_time);
+
+create index idx_site_id_start_time
+    on site_booked_time (site_id, start_time);
+
 create table site_booking_order
 (
     id bigint not null
@@ -61,29 +81,11 @@ create table site_booking_order
     time_modified datetime default CURRENT_TIMESTAMP not null
 );
 
-create index idx_end_time
-    on site_booking_order (end_time);
+create index idx_site_id_status_time_create
+    on site_booking_order (site_id, status, time_create);
 
-create index idx_start_time
-    on site_booking_order (start_time);
-
-create table site_booking_time
-(
-    id bigint not null
-        primary key,
-    site_id bigint not null,
-    start_time datetime not null,
-    end_time datetime not null,
-    is_in_use tinyint(1) default 0 not null,
-    time_create datetime default CURRENT_TIMESTAMP not null,
-    time_modified datetime default CURRENT_TIMESTAMP not null
-);
-
-create index idx_end_time
-    on site_booking_time (end_time);
-
-create index idx_start_time
-    on site_booking_time (start_time);
+create index idx_user_id_status_time_create
+    on site_booking_order (user_id, status, time_create);
 
 create table user
 (

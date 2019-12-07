@@ -44,7 +44,7 @@ public class NewsManager {
         return CacheUtils.handleCache(
                 cache,
                 id,
-                newsDao::getNews,
+                newsDao::get,
                 Function.identity(),
                 (i, c) -> redisUtils.opsForHash().putObject(newsRedisKey, c, newsRedisExpires)
         );
@@ -61,7 +61,7 @@ public class NewsManager {
         return listNewsDigestsByNewsIds(CacheUtils.handleCache(
                 cache,
                 pageParam,
-                newsDao::listNewsDigestIds,
+                newsDao::listIds,
                 Function.identity(),
                 (pp, c) -> redisUtils.opsForValue().set(redisKey, new LongListWrapper(c),
                         newsPageRedisExpires)
@@ -76,7 +76,7 @@ public class NewsManager {
         return CacheUtils.handleBatchCache(
                 cache,
                 newsIds,
-                newsDao::listNews,
+                newsDao::list,
                 newsDTOS -> newsDTOS.stream().map(this::convertTo).collect(Collectors.toList()),
                 (missCache, missData) -> {
                     List<String> missNewsRedisKeys =

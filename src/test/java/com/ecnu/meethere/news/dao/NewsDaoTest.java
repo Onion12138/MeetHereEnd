@@ -31,22 +31,22 @@ class NewsDaoTest {
 
     @BeforeEach
     void insertTestData() {
-        newsDao.insertNews(new NewsDO().setId(-1L).setUserId(1L).setTitle("title").setImage("").setContent(
+        newsDao.insert(new NewsDO().setId(-1L).setUserId(1L).setTitle("title").setImage("").setContent(
                 "content"));
-        newsDao.insertNews(new NewsDO().setId(-2L).setUserId(1L).setTitle("title").setImage("").setContent(
+        newsDao.insert(new NewsDO().setId(-2L).setUserId(1L).setTitle("title").setImage("").setContent(
                 "content"));
-        newsDao.insertNews(new NewsDO().setId(-3L).setUserId(1L).setTitle("title").setImage("").setContent(
+        newsDao.insert(new NewsDO().setId(-3L).setUserId(1L).setTitle("title").setImage("").setContent(
                 "content"));
-        newsDao.insertNews(new NewsDO().setId(-4L).setUserId(1L).setTitle("title").setImage("").setContent(
+        newsDao.insert(new NewsDO().setId(-4L).setUserId(1L).setTitle("title").setImage("").setContent(
                 "content"));
-        newsDao.insertNews(new NewsDO().setId(-5L).setUserId(1L).setTitle("title").setImage("").setContent(
+        newsDao.insert(new NewsDO().setId(-5L).setUserId(1L).setTitle("title").setImage("").setContent(
                 "content"));
     }
 
     @ParameterizedTest
     @MethodSource("listNewsDigestsGen")
     void listNewsDigests(PageParam pageParam, int wSize) {
-        List<Long> newsDigests = newsDao.listNewsDigestIds(pageParam);
+        List<Long> newsDigests = newsDao.listIds(pageParam);
         assertEquals(wSize, newsDigests.size());
     }
 
@@ -64,7 +64,7 @@ class NewsDaoTest {
     @ParameterizedTest
     @MethodSource("listNewsGen")
     void listNews(List<Long> newsIds, int wSize) {
-        List<NewsDTO> newsDigests = newsDao.listNews(newsIds);
+        List<NewsDTO> newsDigests = newsDao.list(newsIds);
         assertEquals(wSize, newsDigests.size());
         assertTrue(isCollectionElementsAllFieldsNotNull(newsDigests));
         if (newsIds != null) {
@@ -86,27 +86,27 @@ class NewsDaoTest {
 
     @Test
     void getNews() {
-        NewsDTO news1 = newsDao.getNews(-1L);
+        NewsDTO news1 = newsDao.get(-1L);
         assertTrue(isAllFieldsNotNull(news1));
 
-        assertNull(newsDao.getNews(-7L));
+        assertNull(newsDao.get(-7L));
     }
 
     @Test
     void deleteNews() {
-        assertEquals(1, newsDao.deleteNews(-1L));
+        assertEquals(1, newsDao.delete(-1L));
     }
 
     @Test
     void updateNews() {
         assertEquals(1,
-                newsDao.updateNews(new NewsUpdateParam(-1L, null, null, null)));
+                newsDao.update(new NewsUpdateParam(-1L, null, null, null)));
 
 
         assertEquals(1,
-                newsDao.updateNews(new NewsUpdateParam(-1L, "你好", null, null)));
+                newsDao.update(new NewsUpdateParam(-1L, "你好", null, null)));
 
         assertEquals(1,
-                newsDao.updateNews(new NewsUpdateParam(-1L, "我好", "12", "23")));
+                newsDao.update(new NewsUpdateParam(-1L, "我好", "12", "23")));
     }
 }
